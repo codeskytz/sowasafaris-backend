@@ -35,6 +35,7 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
         Route::get('content', [AdminSiteContentController::class, 'edit'])->name('content.edit');
         Route::put('content', [AdminSiteContentController::class, 'update'])->name('content.update');
         Route::get('mailbox', MailboxController::class)->name('mailbox.index');
+        Route::post('mailbox/reply', [MailboxController::class, 'reply'])->name('mailbox.reply');
         Route::resource('safaris', AdminSafariController::class)
             ->only(['index', 'store', 'update', 'destroy']);
         Route::resource('pricing-tiers', AdminPricingTierController::class)

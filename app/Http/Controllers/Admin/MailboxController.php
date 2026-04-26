@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ReplyToMailboxMessageRequest;
+use App\Mail\AdminMailboxReply;
 use App\Services\Mailbox\MailboxClient;
 use App\Services\Mailbox\MailboxUnavailableException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -38,5 +43,22 @@ class MailboxController extends Controller
             ],
             'error' => $error,
         ]);
+    }
+
+    public function reply(ReplyToMailboxMessageRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+        $to = (string) $validated['to'];
+        $subject = Str::startsWith((string) $validated['subject'], 'Re:')
+            ? (string) $validated['subject']
+            : 'Re: '.$validated['subject'];
+
+        Mail::to($to)->send(new AdminMailboxReply($subject, (string) $validated['body']));
+
+        return redirect()
+            ->route('admin.mailbox.index', array_filter([
+                'message' => $validated['message'] ?? null,
+            ]))
+            ->with('success', 'Reply sent to '.$to.'.');
     }
 }

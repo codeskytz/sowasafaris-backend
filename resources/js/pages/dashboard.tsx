@@ -48,6 +48,16 @@ const statusVariants: Record<string, 'default' | 'secondary' | 'outline' | 'dest
     closed: 'destructive',
 };
 
+const statCards = [
+    ['Total safaris', 'totalSafaris'],
+    ['Published', 'publishedSafaris'],
+    ['Pending bookings', 'pendingBookings'],
+    ['Total requests', 'totalBookings'],
+    ['Pricing tiers', 'pricingTiers'],
+    ['Gallery items', 'galleryItems'],
+    ['Testimonials', 'testimonials'],
+] as const;
+
 function formatCurrency(value: number): string {
     return currencyFormatter.format(value);
 }
@@ -126,66 +136,27 @@ export default function Dashboard({
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-7">
-                    <Card className="border-[#d8c8a8] bg-[#fffaf0]/90">
+                    {statCards.map(([label, key]) => (
+                        <Card
+                            key={key}
+                            className="border-[#28594a] bg-[#0f3d31] text-[#fff7df] shadow-lg shadow-[#061a16]/20"
+                        >
+                            <CardHeader className="gap-1">
+                                <CardDescription className="font-semibold text-[#ffba20]">
+                                    {label}
+                                </CardDescription>
+                                <CardTitle className="text-3xl font-black text-[#fff7df]">
+                                    {stats[key]}
+                                </CardTitle>
+                            </CardHeader>
+                        </Card>
+                    ))}
+                    <Card className="border-[#28594a] bg-[#0f3d31] text-[#fff7df] shadow-lg shadow-[#061a16]/20 md:col-span-2 xl:col-span-7">
                         <CardHeader className="gap-1">
-                            <CardDescription>Total safaris</CardDescription>
-                            <CardTitle className="text-3xl">
-                                {stats.totalSafaris}
-                            </CardTitle>
-                        </CardHeader>
-                    </Card>
-                    <Card className="border-[#d8c8a8] bg-[#fffaf0]/90">
-                        <CardHeader className="gap-1">
-                            <CardDescription>Published</CardDescription>
-                            <CardTitle className="text-3xl">
-                                {stats.publishedSafaris}
-                            </CardTitle>
-                        </CardHeader>
-                    </Card>
-                    <Card className="border-[#d8c8a8] bg-[#fffaf0]/90">
-                        <CardHeader className="gap-1">
-                            <CardDescription>Pending bookings</CardDescription>
-                            <CardTitle className="text-3xl">
-                                {stats.pendingBookings}
-                            </CardTitle>
-                        </CardHeader>
-                    </Card>
-                    <Card className="border-[#d8c8a8] bg-[#fffaf0]/90">
-                        <CardHeader className="gap-1">
-                            <CardDescription>Total requests</CardDescription>
-                            <CardTitle className="text-3xl">
-                                {stats.totalBookings}
-                            </CardTitle>
-                        </CardHeader>
-                    </Card>
-                    <Card className="border-[#d8c8a8] bg-[#fffaf0]/90">
-                        <CardHeader className="gap-1">
-                            <CardDescription>Pricing tiers</CardDescription>
-                            <CardTitle className="text-3xl">
-                                {stats.pricingTiers}
-                            </CardTitle>
-                        </CardHeader>
-                    </Card>
-                    <Card className="border-[#d8c8a8] bg-[#fffaf0]/90">
-                        <CardHeader className="gap-1">
-                            <CardDescription>Gallery items</CardDescription>
-                            <CardTitle className="text-3xl">
-                                {stats.galleryItems}
-                            </CardTitle>
-                        </CardHeader>
-                    </Card>
-                    <Card className="border-[#d8c8a8] bg-[#fffaf0]/90">
-                        <CardHeader className="gap-1">
-                            <CardDescription>Testimonials</CardDescription>
-                            <CardTitle className="text-3xl">
-                                {stats.testimonials}
-                            </CardTitle>
-                        </CardHeader>
-                    </Card>
-                    <Card className="border-[#d8c8a8] bg-[#fffaf0]/90 md:col-span-2 xl:col-span-7">
-                        <CardHeader className="gap-1">
-                            <CardDescription>Pipeline value</CardDescription>
-                            <CardTitle className="text-3xl">
+                            <CardDescription className="font-semibold text-[#ffba20]">
+                                Pipeline value
+                            </CardDescription>
+                            <CardTitle className="text-3xl font-black text-[#fff7df]">
                                 {formatCurrency(stats.pipelineValue)}
                             </CardTitle>
                         </CardHeader>

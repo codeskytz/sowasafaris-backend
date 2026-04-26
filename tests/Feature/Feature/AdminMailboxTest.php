@@ -2,10 +2,12 @@
 
 namespace Tests\Feature\Feature;
 
+use App\Mail\AdminMailboxReply;
 use App\Models\User;
 use App\Services\Mailbox\MailboxClient;
 use App\Services\Mailbox\MailboxUnavailableException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -87,5 +89,27 @@ class AdminMailboxTest extends TestCase
                     ->where('selectedMessage', null)
                     ->where('error', 'The PHP IMAP extension is not enabled on this server.'),
             );
+    }
+
+    public function test_admin_users_can_reply_to_incoming_mail(): void
+    {
+        Mail::fake();
+
+        $admin = User::factory()->admin()->create();
+
+        $this->actingAs($admin)
+            ->post(route('admin.mailbox.reply'), [
+                'to' => 'traveler@example.com',
+                'subject' => 'Kilimanjaro booking question',
+                'body' => 'Yes, we can help you plan the July climb.',
+                'message' => 101,
+            ])
+            ->assertRedirect(route('admin.mailbox.index', ['message' => 101]));
+
+        Mail::assertSent(
+            AdminMailboxReply::class,
+            fn (AdminMailboxReply $mail): bool => $mail->hasTo('traveler@example.com')
+                && $mail->hasSubject('Re: Kilimanjaro booking question'),
+        );
     }
 }
