@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\GalleryItemController as AdminGalleryItemController;
+use App\Http\Controllers\Admin\MailboxController;
 use App\Http\Controllers\Admin\PricingTierController as AdminPricingTierController;
 use App\Http\Controllers\Admin\SafariController as AdminSafariController;
 use App\Http\Controllers\Admin\SiteContentController as AdminSiteContentController;
@@ -33,6 +34,7 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     Route::prefix('sowa-admin')->name('admin.')->group(function (): void {
         Route::get('content', [AdminSiteContentController::class, 'edit'])->name('content.edit');
         Route::put('content', [AdminSiteContentController::class, 'update'])->name('content.update');
+        Route::get('mailbox', MailboxController::class)->name('mailbox.index');
         Route::resource('safaris', AdminSafariController::class)
             ->only(['index', 'store', 'update', 'destroy']);
         Route::resource('pricing-tiers', AdminPricingTierController::class)

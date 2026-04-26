@@ -115,4 +115,24 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Incoming Support Mailbox
+    |--------------------------------------------------------------------------
+    |
+    | These settings power the admin inbox. By default, the incoming mailbox
+    | reuses the same support address credentials used for outbound mail.
+    |
+    */
+
+    'incoming' => [
+        'host' => env('MAIL_INCOMING_HOST', env('MAIL_HOST')),
+        'port' => env('MAIL_INCOMING_PORT', 993),
+        'protocol' => env('MAIL_INCOMING_PROTOCOL', 'imap'),
+        'encryption' => env('MAIL_INCOMING_ENCRYPTION', 'ssl'),
+        'mailbox' => env('MAIL_INCOMING_MAILBOX', 'INBOX'),
+        'username' => env('MAIL_INCOMING_USERNAME', env('MAIL_USERNAME')),
+        'password' => env('MAIL_INCOMING_PASSWORD', env('MAIL_PASSWORD')),
+    ],
+
 ];

@@ -5,6 +5,7 @@ import {
     Compass,
     FileText,
     Image,
+    Inbox,
     LayoutGrid,
     MessageSquareText,
     Settings,
@@ -26,6 +27,7 @@ import { dashboard } from '@/routes';
 import { index as bookingsIndex } from '@/routes/admin/bookings';
 import { edit as contentEdit } from '@/routes/admin/content';
 import { index as galleryItemsIndex } from '@/routes/admin/gallery-items';
+import { index as mailboxIndex } from '@/routes/admin/mailbox';
 import { index as pricingTiersIndex } from '@/routes/admin/pricing-tiers';
 import { index as safarisIndex } from '@/routes/admin/safaris';
 import { index as testimonialsIndex } from '@/routes/admin/testimonials';
@@ -82,6 +84,11 @@ export function AppSidebar() {
                   href: bookingsIndex(),
                   icon: CalendarCheck2,
               },
+              {
+                  title: 'Inbox',
+                  href: mailboxIndex(),
+                  icon: Inbox,
+              },
           ]
         : [];
 
@@ -111,8 +118,8 @@ export function AppSidebar() {
                         Expedition Desk
                     </p>
                     <p className="mt-2 text-sm leading-5 text-sidebar-foreground/72">
-                        Manage safaris, bookings, pricing, gallery stories, and
-                        testimonials.
+                        Manage safaris, bookings, inbox messages, pricing,
+                        gallery stories, and testimonials.
                     </p>
                 </div>
                 <NavMain items={mainNavItems} />

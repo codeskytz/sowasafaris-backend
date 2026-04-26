@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Feature;
 
-use Database\Seeders\AdminUserSeeder;
 use App\Models\Booking;
 use App\Models\Safari;
 use App\Models\User;
+use Database\Seeders\AdminUserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -24,6 +24,7 @@ class AdminManagementTest extends TestCase
         $this->get(route('admin.gallery-items.index'))->assertRedirect(route('login'));
         $this->get(route('admin.testimonials.index'))->assertRedirect(route('login'));
         $this->get(route('admin.bookings.index'))->assertRedirect(route('login'));
+        $this->get(route('admin.mailbox.index'))->assertRedirect(route('login'));
     }
 
     public function test_non_admin_users_are_forbidden_from_admin_routes(): void
@@ -37,6 +38,7 @@ class AdminManagementTest extends TestCase
         $this->actingAs($user)->get(route('admin.gallery-items.index'))->assertForbidden();
         $this->actingAs($user)->get(route('admin.testimonials.index'))->assertForbidden();
         $this->actingAs($user)->get(route('admin.bookings.index'))->assertForbidden();
+        $this->actingAs($user)->get(route('admin.mailbox.index'))->assertForbidden();
     }
 
     public function test_admin_users_are_redirected_to_sowa_admin_after_login(): void
