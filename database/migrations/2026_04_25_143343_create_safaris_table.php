@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('safaris', function (Blueprint $table): void {
             $table->id();
             $table->string('name');
-            $table->string('slug')->unique();
+            $table->string('slug', 191)->unique();
             $table->string('summary');
             $table->text('description');
             $table->string('difficulty', 40);

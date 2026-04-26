@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('bookings', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('safari_id')->constrained()->restrictOnDelete();
-            $table->string('reference')->unique();
+            $table->string('reference', 191)->unique();
             $table->string('customer_name');
             $table->string('customer_email');
             $table->string('departure_month', 7);

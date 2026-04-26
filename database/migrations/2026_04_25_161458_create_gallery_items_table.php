@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('gallery_items', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('slug')->unique();
+            $table->string('slug', 191)->unique();
             $table->string('category', 40)->index();
             $table->string('image_url', 2048);
             $table->string('image_alt');

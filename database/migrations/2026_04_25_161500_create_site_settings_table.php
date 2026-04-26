@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('site_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('key')->unique();
+            $table->string('key', 191)->unique();
             $table->json('value');
             $table->timestamps();
         });
