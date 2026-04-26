@@ -4,7 +4,6 @@ import {
     CalendarCheck2,
     Compass,
     FileText,
-    Home,
     Image,
     LayoutGrid,
     MessageSquareText,
@@ -23,7 +22,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { home, dashboard } from '@/routes';
+import { dashboard } from '@/routes';
 import { index as bookingsIndex } from '@/routes/admin/bookings';
 import { edit as contentEdit } from '@/routes/admin/content';
 import { index as galleryItemsIndex } from '@/routes/admin/gallery-items';
@@ -34,11 +33,6 @@ import { edit as editProfile } from '@/routes/profile';
 import type { NavItem } from '@/types';
 
 const footerNavItems: NavItem[] = [
-    {
-        title: 'Website home',
-        href: home(),
-        icon: Home,
-    },
     {
         title: 'Profile',
         href: editProfile(),
@@ -91,10 +85,14 @@ export function AppSidebar() {
           ]
         : [];
 
-    const logoHref = isAdmin ? dashboard() : home();
+    const logoHref = dashboard();
 
     return (
-        <Sidebar collapsible="icon" variant="inset">
+        <Sidebar
+            collapsible="icon"
+            variant="inset"
+            className="border-sidebar-border bg-sidebar text-sidebar-foreground"
+        >
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
@@ -108,6 +106,15 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
+                <div className="mx-3 mb-3 rounded-3xl border border-sidebar-primary/20 bg-sidebar-accent/70 p-4 text-sidebar-foreground shadow-inner shadow-black/10 group-data-[collapsible=icon]:hidden">
+                    <p className="text-xs font-bold tracking-[0.32em] text-sidebar-primary uppercase">
+                        Expedition Desk
+                    </p>
+                    <p className="mt-2 text-sm leading-5 text-sidebar-foreground/72">
+                        Manage safaris, bookings, pricing, gallery stories, and
+                        testimonials.
+                    </p>
+                </div>
                 <NavMain items={mainNavItems} />
             </SidebarContent>
 

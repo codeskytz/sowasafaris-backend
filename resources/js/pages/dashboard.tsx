@@ -1,5 +1,4 @@
 import { Head, Link } from '@inertiajs/react';
-import Heading from '@/components/heading';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -78,33 +77,56 @@ export default function Dashboard({
             <Head title="Sowa Admin" />
 
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4">
-                <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                    <Heading
-                        title="Sowa Admin"
-                        description="Track active safari inventory, booking demand, and pricing momentum from one place."
-                    />
+                <div className="relative overflow-hidden rounded-[2rem] border border-[#d8c8a8] bg-[#0b2b24] p-6 text-[#fff7df] shadow-xl shadow-[#0b2b24]/10 md:p-8">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_10%,rgba(255,186,32,0.28),transparent_22rem)]" />
+                    <div className="relative flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+                        <div className="max-w-3xl">
+                            <p className="text-xs font-black tracking-[0.4em] text-[#ffba20] uppercase">
+                                Sowa Safaris Admin
+                            </p>
+                            <h1 className="mt-4 text-4xl font-black tracking-tight md:text-5xl">
+                                Expedition operations, all from base camp.
+                            </h1>
+                            <p className="mt-4 max-w-2xl text-sm leading-7 text-[#fff7df]/72 md:text-base">
+                                Track active safari inventory, booking demand,
+                                gallery stories, testimonials, and pricing
+                                momentum from one grounded command center.
+                            </p>
+                        </div>
 
-                    <div className="flex flex-wrap gap-3">
-                        <Button asChild>
-                            <Link href={safarisIndex()} prefetch>
-                                Manage safaris
-                            </Link>
-                        </Button>
-                        <Button variant="outline" asChild>
-                            <Link href={bookingsIndex()} prefetch>
-                                Review bookings
-                            </Link>
-                        </Button>
-                        <Button variant="ghost" asChild>
-                            <Link href={contentEdit()} prefetch>
-                                Edit site content
-                            </Link>
-                        </Button>
+                        <div className="flex flex-wrap gap-3">
+                            <Button
+                                asChild
+                                className="rounded-full bg-[#ffba20] font-bold text-[#11251f] hover:bg-[#ffd166]"
+                            >
+                                <Link href={safarisIndex()} prefetch>
+                                    Manage safaris
+                                </Link>
+                            </Button>
+                            <Button
+                                variant="outline"
+                                asChild
+                                className="rounded-full border-[#ffba20]/40 bg-white/10 text-[#fff7df] hover:bg-white/20 hover:text-[#fff7df]"
+                            >
+                                <Link href={bookingsIndex()} prefetch>
+                                    Review bookings
+                                </Link>
+                            </Button>
+                            <Button
+                                variant="ghost"
+                                asChild
+                                className="rounded-full text-[#fff7df] hover:bg-white/10 hover:text-[#fff7df]"
+                            >
+                                <Link href={contentEdit()} prefetch>
+                                    Edit site content
+                                </Link>
+                            </Button>
+                        </div>
                     </div>
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-7">
-                    <Card>
+                    <Card className="border-[#d8c8a8] bg-[#fffaf0]/90">
                         <CardHeader className="gap-1">
                             <CardDescription>Total safaris</CardDescription>
                             <CardTitle className="text-3xl">
@@ -112,7 +134,7 @@ export default function Dashboard({
                             </CardTitle>
                         </CardHeader>
                     </Card>
-                    <Card>
+                    <Card className="border-[#d8c8a8] bg-[#fffaf0]/90">
                         <CardHeader className="gap-1">
                             <CardDescription>Published</CardDescription>
                             <CardTitle className="text-3xl">
@@ -120,7 +142,7 @@ export default function Dashboard({
                             </CardTitle>
                         </CardHeader>
                     </Card>
-                    <Card>
+                    <Card className="border-[#d8c8a8] bg-[#fffaf0]/90">
                         <CardHeader className="gap-1">
                             <CardDescription>Pending bookings</CardDescription>
                             <CardTitle className="text-3xl">
@@ -128,7 +150,7 @@ export default function Dashboard({
                             </CardTitle>
                         </CardHeader>
                     </Card>
-                    <Card>
+                    <Card className="border-[#d8c8a8] bg-[#fffaf0]/90">
                         <CardHeader className="gap-1">
                             <CardDescription>Total requests</CardDescription>
                             <CardTitle className="text-3xl">
@@ -136,7 +158,7 @@ export default function Dashboard({
                             </CardTitle>
                         </CardHeader>
                     </Card>
-                    <Card>
+                    <Card className="border-[#d8c8a8] bg-[#fffaf0]/90">
                         <CardHeader className="gap-1">
                             <CardDescription>Pricing tiers</CardDescription>
                             <CardTitle className="text-3xl">
@@ -144,7 +166,7 @@ export default function Dashboard({
                             </CardTitle>
                         </CardHeader>
                     </Card>
-                    <Card>
+                    <Card className="border-[#d8c8a8] bg-[#fffaf0]/90">
                         <CardHeader className="gap-1">
                             <CardDescription>Gallery items</CardDescription>
                             <CardTitle className="text-3xl">
@@ -152,7 +174,7 @@ export default function Dashboard({
                             </CardTitle>
                         </CardHeader>
                     </Card>
-                    <Card>
+                    <Card className="border-[#d8c8a8] bg-[#fffaf0]/90">
                         <CardHeader className="gap-1">
                             <CardDescription>Testimonials</CardDescription>
                             <CardTitle className="text-3xl">
@@ -160,7 +182,7 @@ export default function Dashboard({
                             </CardTitle>
                         </CardHeader>
                     </Card>
-                    <Card>
+                    <Card className="border-[#d8c8a8] bg-[#fffaf0]/90 md:col-span-2 xl:col-span-7">
                         <CardHeader className="gap-1">
                             <CardDescription>Pipeline value</CardDescription>
                             <CardTitle className="text-3xl">

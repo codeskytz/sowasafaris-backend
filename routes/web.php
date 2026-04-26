@@ -8,12 +8,22 @@ use App\Http\Controllers\Admin\SafariController as AdminSafariController;
 use App\Http\Controllers\Admin\SiteContentController as AdminSiteContentController;
 use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
 use App\Http\Middleware\EnsureUserIsAdmin;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
-Route::inertia('/', 'welcome', [
-    'canRegister' => Features::enabled(Features::registration()),
-])->name('home');
+Route::get('/', function (Request $request) {
+    if ($request->user()?->is_admin) {
+        return redirect()->route('dashboard');
+    }
+
+    return Inertia::render('auth/login', [
+        'canResetPassword' => Features::enabled(Features::resetPasswords()),
+        'canRegister' => false,
+        'status' => $request->session()->get('status'),
+    ]);
+})->name('home');
 
 Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(function (): void {
     Route::redirect('dashboard', 'sowa-admin');
