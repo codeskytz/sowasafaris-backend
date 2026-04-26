@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('safaris', function (Blueprint $table) {
+            $table->string('difficulty_group', 40)
+                ->default('balanced')
+                ->after('difficulty');
+            $table->string('image_alt')
+                ->nullable()
+                ->after('image_url');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('safaris', function (Blueprint $table) {
+            $table->dropColumn(['difficulty_group', 'image_alt']);
+        });
+    }
+};
