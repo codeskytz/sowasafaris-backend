@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
+use App\Http\Controllers\Admin\ContactMessageController as AdminContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\GalleryItemController as AdminGalleryItemController;
 use App\Http\Controllers\Admin\MailboxController;
@@ -45,6 +46,8 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
         Route::resource('testimonials', AdminTestimonialController::class)
             ->only(['index', 'store', 'update', 'destroy']);
         Route::resource('bookings', AdminBookingController::class)
+            ->only(['index', 'update', 'destroy']);
+        Route::resource('contact-messages', AdminContactMessageController::class)
             ->only(['index', 'update', 'destroy']);
     });
 });

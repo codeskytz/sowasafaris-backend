@@ -9,6 +9,7 @@ use App\Models\Safari;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -89,7 +90,9 @@ class SafariController extends Controller
 
     public function store(StoreSafariRequest $request): RedirectResponse
     {
-        Safari::query()->create($request->validated());
+        Safari::query()->create(
+            $this->validatedDataWithUploadedImage($request),
+        );
 
         Inertia::flash('toast', [
             'type' => 'success',
@@ -101,7 +104,9 @@ class SafariController extends Controller
 
     public function update(UpdateSafariRequest $request, Safari $safari): RedirectResponse
     {
-        $safari->update($request->validated());
+        $safari->update(
+            $this->validatedDataWithUploadedImage($request),
+        );
 
         Inertia::flash('toast', [
             'type' => 'success',
@@ -144,5 +149,21 @@ class SafariController extends Controller
                 'label' => $label,
             ],
         )->values();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function validatedDataWithUploadedImage(StoreSafariRequest $request): array
+    {
+        $validated = $request->validated();
+        unset($validated['image_file']);
+
+        if ($request->hasFile('image_file')) {
+            $path = $request->file('image_file')->store('sowa-safaris/safaris', 'public');
+            $validated['image_url'] = Storage::disk('public')->url($path);
+        }
+
+        return $validated;
     }
 }

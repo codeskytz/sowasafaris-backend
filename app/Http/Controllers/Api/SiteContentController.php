@@ -66,6 +66,7 @@ class SiteContentController extends Controller
                     ->get(),
             )->resolve(),
             'departureMonths' => $content[SiteSetting::DEPARTURE_MONTHS],
+            'contactContent' => $content[SiteSetting::CONTACT_CONTENT],
             'galleryItems' => GalleryItemResource::collection(
                 GalleryItem::query()
                     ->published()

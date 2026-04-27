@@ -156,17 +156,41 @@ function GalleryItemFields({
                         galleryItem ? `image-url-${galleryItem.id}` : 'image-url'
                     }
                 >
-                    Image URL
+                    Image upload
                 </Label>
                 <Input
                     id={
                         galleryItem ? `image-url-${galleryItem.id}` : 'image-url'
                     }
+                    name="image_file"
+                    type="file"
+                    accept="image/*"
+                />
+                <p className="text-xs text-muted-foreground">
+                    Upload a gallery picture to store it on this server.
+                </p>
+            </div>
+
+            <div className="grid gap-2 xl:col-span-2">
+                <Label
+                    htmlFor={
+                        galleryItem
+                            ? `external-image-url-${galleryItem.id}`
+                            : 'external-image-url'
+                    }
+                >
+                    Or paste image URL
+                </Label>
+                <Input
+                    id={
+                        galleryItem
+                            ? `external-image-url-${galleryItem.id}`
+                            : 'external-image-url'
+                    }
                     name="image_url"
                     type="url"
                     defaultValue={galleryItem?.image_url ?? ''}
                     placeholder="https://..."
-                    required
                 />
             </div>
 
@@ -269,6 +293,9 @@ export default function GalleryManagementPage({
                                         <InputError
                                             message={errors.image_url}
                                         />
+                                        <InputError
+                                            message={errors.image_file}
+                                        />
                                     </div>
 
                                     <Button disabled={processing}>
@@ -338,7 +365,8 @@ export default function GalleryManagementPage({
                                     />
 
                                     <Form
-                                        {...update.form(galleryItem.id)}
+                                        action={update.url(galleryItem.id)}
+                                        method="post"
                                         options={{ preserveScroll: true }}
                                         className="space-y-4"
                                     >
@@ -352,6 +380,11 @@ export default function GalleryManagementPage({
                                                     layoutSizeOptions={
                                                         layoutSizeOptions
                                                     }
+                                                />
+                                                <input
+                                                    type="hidden"
+                                                    name="_method"
+                                                    value="patch"
                                                 />
 
                                                 <div className="grid gap-2">
@@ -374,6 +407,11 @@ export default function GalleryManagementPage({
                                                     <InputError
                                                         message={
                                                             errors.image_url
+                                                        }
+                                                    />
+                                                    <InputError
+                                                        message={
+                                                            errors.image_file
                                                         }
                                                     />
                                                 </div>

@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdateSiteContentRequest extends FormRequest
 {
@@ -34,6 +33,15 @@ class UpdateSiteContentRequest extends FormRequest
             'departure_months' => ['required', 'array', 'min:1', 'max:12'],
             'departure_months.*.value' => ['required', 'date_format:Y-m', 'distinct'],
             'departure_months.*.label' => ['required', 'string', 'max:80'],
+            'contact_content' => ['required', 'array'],
+            'contact_content.headline' => ['required', 'string', 'max:160'],
+            'contact_content.description' => ['required', 'string', 'max:1000'],
+            'contact_content.email' => ['required', 'email:rfc,dns', 'max:255'],
+            'contact_content.phone' => ['required', 'string', 'max:80'],
+            'contact_content.whatsapp' => ['nullable', 'string', 'max:80'],
+            'contact_content.address' => ['required', 'string', 'max:255'],
+            'contact_content.office_hours' => ['required', 'string', 'max:160'],
+            'contact_content.response_time' => ['required', 'string', 'max:160'],
             'footer_links' => ['required', 'array', 'min:1', 'max:10'],
             'footer_links.*.label' => ['required', 'string', 'max:80'],
             'footer_links.*.href' => ['required', 'string', 'max:255'],

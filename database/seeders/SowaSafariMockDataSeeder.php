@@ -253,6 +253,7 @@ class SowaSafariMockDataSeeder extends Seeder
                 ['label' => 'Gallery', 'href' => '#gallery'],
                 ['label' => 'Reviews', 'href' => '#reviews'],
                 ['label' => 'Booking', 'href' => '#booking'],
+                ['label' => 'Contact', 'href' => '/contact'],
             ],
             SiteSetting::TRUST_INDICATORS => [
                 [
@@ -281,8 +282,18 @@ class SowaSafariMockDataSeeder extends Seeder
             SiteSetting::FOOTER_LINKS => [
                 ['label' => 'Pricing Guide', 'href' => '#pricing'],
                 ['label' => 'Summit Gallery', 'href' => '#gallery'],
-                ['label' => 'Contact Guide', 'href' => 'mailto:guide@sowasafaris.com'],
+                ['label' => 'Contact Us', 'href' => '/contact'],
                 ['label' => 'Reserve Climb', 'href' => '#booking'],
+            ],
+            SiteSetting::CONTACT_CONTENT => [
+                'headline' => 'Talk to Sowa Safaris',
+                'description' => 'Ask about routes, availability, group trips, private departures, or custom safari planning. Our team will help you choose the right journey.',
+                'email' => 'support@sowasafaris.com',
+                'phone' => '+255 700 000 000',
+                'whatsapp' => '+255 700 000 000',
+                'address' => 'Moshi, Kilimanjaro, Tanzania',
+                'office_hours' => 'Monday to Saturday, 8:00 AM - 6:00 PM',
+                'response_time' => 'We usually reply within one business day.',
             ],
             SiteSetting::FOOTER_CONTENT => [
                 'brand' => 'SowaSafaris',

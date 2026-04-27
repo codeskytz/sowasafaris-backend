@@ -295,10 +295,36 @@ function SafariFields({
 
             <div className="grid gap-2 xl:col-span-3">
                 <Label htmlFor={safari ? `image-${safari.id}` : 'image'}>
-                    Cover image URL
+                    Cover image upload
                 </Label>
                 <Input
                     id={safari ? `image-${safari.id}` : 'image'}
+                    name="image_file"
+                    type="file"
+                    accept="image/*"
+                />
+                <p className="text-xs text-muted-foreground">
+                    Upload a new image to store it on this server.
+                </p>
+                {safari?.image_url && (
+                    <img
+                        src={safari.image_url}
+                        alt={safari.image_alt ?? safari.name}
+                        className="h-32 w-full rounded-xl object-cover"
+                    />
+                )}
+            </div>
+
+            <div className="grid gap-2">
+                <Label
+                    htmlFor={
+                        safari ? `image-url-${safari.id}` : 'image-url'
+                    }
+                >
+                    Or paste image URL
+                </Label>
+                <Input
+                    id={safari ? `image-url-${safari.id}` : 'image-url'}
                     name="image_url"
                     type="url"
                     defaultValue={safari?.image_url ?? ''}
@@ -504,6 +530,9 @@ export default function SafariManagementPage({
                                         <InputError
                                             message={errors.base_price}
                                         />
+                                        <InputError
+                                            message={errors.image_file}
+                                        />
                                     </div>
 
                                     <Button disabled={processing}>
@@ -573,7 +602,8 @@ export default function SafariManagementPage({
                                 </CardHeader>
                                 <CardContent>
                                     <Form
-                                        {...update.form(safari.slug)}
+                                        action={update.url(safari.slug)}
+                                        method="post"
                                         options={{ preserveScroll: true }}
                                         className="space-y-4"
                                     >
@@ -587,6 +617,11 @@ export default function SafariManagementPage({
                                                     difficultyGroupOptions={
                                                         difficultyGroupOptions
                                                     }
+                                                />
+                                                <input
+                                                    type="hidden"
+                                                    name="_method"
+                                                    value="patch"
                                                 />
 
                                                 <div className="grid gap-2">
@@ -614,6 +649,11 @@ export default function SafariManagementPage({
                                                     <InputError
                                                         message={
                                                             errors.base_price
+                                                        }
+                                                    />
+                                                    <InputError
+                                                        message={
+                                                            errors.image_file
                                                         }
                                                     />
                                                 </div>

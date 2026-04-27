@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\ContactMessage;
 use App\Models\GalleryItem;
 use App\Models\PricingTier;
 use App\Models\Safari;
@@ -21,6 +22,7 @@ class DashboardController extends Controller
                 'publishedSafaris' => Safari::query()->published()->count(),
                 'pendingBookings' => Booking::query()->where('status', 'pending')->count(),
                 'totalBookings' => Booking::query()->count(),
+                'contactMessages' => ContactMessage::query()->where('status', 'new')->count(),
                 'pricingTiers' => PricingTier::query()->count(),
                 'galleryItems' => GalleryItem::query()->count(),
                 'testimonials' => Testimonial::query()->count(),

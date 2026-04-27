@@ -27,11 +27,23 @@ export type FooterContent = {
     copyright_text: string;
 };
 
+export type ContactContent = {
+    headline: string;
+    description: string;
+    email: string;
+    phone: string;
+    whatsapp: string;
+    address: string;
+    office_hours: string;
+    response_time: string;
+};
+
 export type AdminSiteContent = {
     hero_content: HeroContent;
     navigation_links: SiteLink[];
     trust_indicators: TrustIndicator[];
     departure_months: DepartureMonth[];
+    contact_content: ContactContent;
     footer_links: SiteLink[];
     footer_content: FooterContent;
 };
@@ -79,4 +91,21 @@ export type AdminTestimonial = {
         name: string;
     } | null;
     updated_at: string | null;
+};
+
+export type AdminContactMessage = {
+    id: number;
+    name: string;
+    email: string;
+    phone: string | null;
+    subject: string;
+    message: string;
+    status: string;
+    admin_notes: string | null;
+    reviewed_at: string | null;
+    created_at: string | null;
+    reviewed_by: {
+        id: number;
+        name: string;
+    } | null;
 };

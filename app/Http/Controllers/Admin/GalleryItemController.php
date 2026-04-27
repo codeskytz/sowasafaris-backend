@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateGalleryItemRequest;
 use App\Models\GalleryItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -40,7 +41,9 @@ class GalleryItemController extends Controller
 
     public function store(StoreGalleryItemRequest $request): RedirectResponse
     {
-        GalleryItem::query()->create($request->validated());
+        GalleryItem::query()->create(
+            $this->validatedDataWithUploadedImage($request),
+        );
 
         Inertia::flash('toast', [
             'type' => 'success',
@@ -52,7 +55,9 @@ class GalleryItemController extends Controller
 
     public function update(UpdateGalleryItemRequest $request, GalleryItem $galleryItem): RedirectResponse
     {
-        $galleryItem->update($request->validated());
+        $galleryItem->update(
+            $this->validatedDataWithUploadedImage($request),
+        );
 
         Inertia::flash('toast', [
             'type' => 'success',
@@ -86,5 +91,21 @@ class GalleryItemController extends Controller
                 'label' => $label,
             ],
         )->values();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function validatedDataWithUploadedImage(StoreGalleryItemRequest $request): array
+    {
+        $validated = $request->validated();
+        unset($validated['image_file']);
+
+        if ($request->hasFile('image_file')) {
+            $path = $request->file('image_file')->store('sowa-safaris/gallery', 'public');
+            $validated['image_url'] = Storage::disk('public')->url($path);
+        }
+
+        return $validated;
     }
 }

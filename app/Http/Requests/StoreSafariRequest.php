@@ -6,6 +6,7 @@ use App\Models\Safari;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\Rules\Unique;
 
 class StoreSafariRequest extends FormRequest
@@ -35,7 +36,8 @@ class StoreSafariRequest extends FormRequest
             'spots_left' => ['nullable', 'integer', 'min:0', 'max:60'],
             'best_for' => ['nullable', 'string', 'max:255'],
             'image_url' => ['nullable', 'url', 'max:2048'],
-            'image_alt' => ['nullable', 'string', 'max:255', Rule::requiredIf($this->filled('image_url'))],
+            'image_file' => ['nullable', File::image()->max(6 * 1024)],
+            'image_alt' => ['nullable', 'string', 'max:255', Rule::requiredIf($this->filled('image_url') || $this->hasFile('image_file'))],
             'is_featured' => ['required', 'boolean'],
             'is_published' => ['required', 'boolean'],
             'sort_order' => ['required', 'integer', 'min:0', 'max:9999'],

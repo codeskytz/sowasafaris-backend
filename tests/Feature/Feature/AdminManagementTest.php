@@ -3,11 +3,15 @@
 namespace Tests\Feature\Feature;
 
 use App\Models\Booking;
+use App\Models\ContactMessage;
+use App\Models\GalleryItem;
 use App\Models\Safari;
 use App\Models\User;
 use Database\Seeders\AdminUserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -24,6 +28,7 @@ class AdminManagementTest extends TestCase
         $this->get(route('admin.gallery-items.index'))->assertRedirect(route('login'));
         $this->get(route('admin.testimonials.index'))->assertRedirect(route('login'));
         $this->get(route('admin.bookings.index'))->assertRedirect(route('login'));
+        $this->get(route('admin.contact-messages.index'))->assertRedirect(route('login'));
         $this->get(route('admin.mailbox.index'))->assertRedirect(route('login'));
     }
 
@@ -38,6 +43,7 @@ class AdminManagementTest extends TestCase
         $this->actingAs($user)->get(route('admin.gallery-items.index'))->assertForbidden();
         $this->actingAs($user)->get(route('admin.testimonials.index'))->assertForbidden();
         $this->actingAs($user)->get(route('admin.bookings.index'))->assertForbidden();
+        $this->actingAs($user)->get(route('admin.contact-messages.index'))->assertForbidden();
         $this->actingAs($user)->get(route('admin.mailbox.index'))->assertForbidden();
     }
 
@@ -142,6 +148,67 @@ class AdminManagementTest extends TestCase
         $this->assertFalse($safari->is_featured);
     }
 
+    public function test_admin_users_can_upload_safari_and_gallery_images(): void
+    {
+        Storage::fake('public');
+
+        $user = User::factory()->admin()->create();
+
+        $this->actingAs($user)
+            ->post(route('admin.safaris.store'), [
+                'name' => 'Server Stored Summit Trek',
+                'slug' => 'server-stored-summit-trek',
+                'summary' => 'A server-hosted safari image test.',
+                'description' => 'A complete description for the uploaded safari image test.',
+                'difficulty' => 'Moderate',
+                'difficulty_group' => 'balanced',
+                'duration_days' => 5,
+                'elevation_meters' => 4200,
+                'base_price' => 1500,
+                'availability' => 'open',
+                'next_departure_at' => '2026-08-10',
+                'spots_left' => 10,
+                'best_for' => 'Small groups',
+                'image_file' => UploadedFile::fake()->image('summit.jpg', 1200, 800),
+                'image_alt' => 'Trekkers below a summit ridge',
+                'is_featured' => true,
+                'is_published' => true,
+                'sort_order' => 1,
+            ])
+            ->assertRedirect(route('admin.safaris.index'));
+
+        $safari = Safari::query()
+            ->where('slug', 'server-stored-summit-trek')
+            ->firstOrFail();
+
+        $this->assertStringContainsString('/storage/sowa-safaris/safaris/', $safari->image_url);
+        Storage::disk('public')->assertExists(
+            str_replace('/storage/', '', parse_url($safari->image_url, PHP_URL_PATH) ?: ''),
+        );
+
+        $this->actingAs($user)
+            ->post(route('admin.gallery-items.store'), [
+                'title' => 'Uploaded Glacier Gallery',
+                'slug' => 'uploaded-glacier-gallery',
+                'category' => 'summit',
+                'image_file' => UploadedFile::fake()->image('glacier.jpg', 1200, 800),
+                'image_alt' => 'Glacier ridge uploaded from admin',
+                'layout_size' => 'wide',
+                'is_published' => true,
+                'sort_order' => 1,
+            ])
+            ->assertRedirect(route('admin.gallery-items.index'));
+
+        $galleryItem = GalleryItem::query()
+            ->where('slug', 'uploaded-glacier-gallery')
+            ->firstOrFail();
+
+        $this->assertStringContainsString('/storage/sowa-safaris/gallery/', $galleryItem->image_url);
+        Storage::disk('public')->assertExists(
+            str_replace('/storage/', '', parse_url($galleryItem->image_url, PHP_URL_PATH) ?: ''),
+        );
+    }
+
     public function test_admin_users_can_filter_and_update_booking_statuses(): void
     {
         $user = User::factory()->admin()->create();
@@ -183,6 +250,55 @@ class AdminManagementTest extends TestCase
         $this->assertSame('Call scheduled for tomorrow morning.', $booking->admin_notes);
         $this->assertNotNull($booking->reviewed_at);
         $this->assertSame($user->id, $booking->reviewed_by_user_id);
+    }
+
+    public function test_admin_users_can_manage_contact_messages(): void
+    {
+        $user = User::factory()->admin()->create();
+        $message = ContactMessage::query()->create([
+            'name' => 'Nia Traveler',
+            'email' => 'nia@example.com',
+            'phone' => '+255 712 000 000',
+            'subject' => 'Private family safari',
+            'message' => 'We would like help planning a private family safari for August.',
+            'status' => 'new',
+        ]);
+        ContactMessage::query()->create([
+            'name' => 'Other Guest',
+            'email' => 'other@example.com',
+            'subject' => 'Different request',
+            'message' => 'Another message for another route.',
+            'status' => 'closed',
+        ]);
+
+        $this->actingAs($user)
+            ->get(route('admin.contact-messages.index', [
+                'search' => 'family',
+                'status' => 'new',
+            ]))
+            ->assertOk()
+            ->assertInertia(
+                fn (Assert $page): Assert => $page
+                    ->component('admin/contact-messages/index')
+                    ->where('filters.search', 'family')
+                    ->where('filters.status', 'new')
+                    ->has('messages.data', 1)
+                    ->where('messages.data.0.email', 'nia@example.com'),
+            );
+
+        $this->actingAs($user)
+            ->patch(route('admin.contact-messages.update', $message), [
+                'status' => 'replied',
+                'admin_notes' => 'Sent a private trip follow-up.',
+            ])
+            ->assertRedirect();
+
+        $message->refresh();
+
+        $this->assertSame('replied', $message->status);
+        $this->assertSame('Sent a private trip follow-up.', $message->admin_notes);
+        $this->assertSame($user->id, $message->reviewed_by_user_id);
+        $this->assertNotNull($message->reviewed_at);
     }
 
     public function test_admin_users_can_delete_booking_requests(): void

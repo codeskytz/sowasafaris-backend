@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/card';
 import { dashboard } from '@/routes';
 import { index as bookingsIndex } from '@/routes/admin/bookings';
+import { index as contactMessagesIndex } from '@/routes/admin/contact-messages';
 import { edit as contentEdit } from '@/routes/admin/content';
 import { index as galleryItemsIndex } from '@/routes/admin/gallery-items';
 import { index as pricingTiersIndex } from '@/routes/admin/pricing-tiers';
@@ -53,6 +54,7 @@ const statCards = [
     ['Published', 'publishedSafaris'],
     ['Pending bookings', 'pendingBookings'],
     ['Total requests', 'totalBookings'],
+    ['New contact messages', 'contactMessages'],
     ['Pricing tiers', 'pricingTiers'],
     ['Gallery items', 'galleryItems'],
     ['Testimonials', 'testimonials'],
@@ -135,7 +137,7 @@ export default function Dashboard({
                     </div>
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-7">
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                     {statCards.map(([label, key]) => (
                         <Card
                             key={key}
@@ -151,7 +153,7 @@ export default function Dashboard({
                             </CardHeader>
                         </Card>
                     ))}
-                    <Card className="border-[#28594a] bg-[#0f3d31] text-[#fff7df] shadow-lg shadow-[#061a16]/20 md:col-span-2 xl:col-span-7">
+                    <Card className="border-[#28594a] bg-[#0f3d31] text-[#fff7df] shadow-lg shadow-[#061a16]/20 md:col-span-2 xl:col-span-4">
                         <CardHeader className="gap-1">
                             <CardDescription className="font-semibold text-[#ffba20]">
                                 Pipeline value
@@ -175,6 +177,11 @@ export default function Dashboard({
                         <Button variant="outline" className="justify-start" asChild>
                             <Link href={contentEdit()} prefetch>
                                 Site content
+                            </Link>
+                        </Button>
+                        <Button variant="outline" asChild>
+                            <Link href={contactMessagesIndex()} prefetch>
+                                Contact messages
                             </Link>
                         </Button>
                         <Button variant="outline" className="justify-start" asChild>

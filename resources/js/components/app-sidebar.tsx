@@ -7,6 +7,7 @@ import {
     Image,
     Inbox,
     LayoutGrid,
+    MailQuestion,
     MessageSquareText,
     Settings,
 } from 'lucide-react';
@@ -25,6 +26,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { index as bookingsIndex } from '@/routes/admin/bookings';
+import { index as contactMessagesIndex } from '@/routes/admin/contact-messages';
 import { edit as contentEdit } from '@/routes/admin/content';
 import { index as galleryItemsIndex } from '@/routes/admin/gallery-items';
 import { index as mailboxIndex } from '@/routes/admin/mailbox';
@@ -83,6 +85,11 @@ export function AppSidebar() {
                   title: 'Bookings',
                   href: bookingsIndex(),
                   icon: CalendarCheck2,
+              },
+              {
+                  title: 'Contact messages',
+                  href: contactMessagesIndex(),
+                  icon: MailQuestion,
               },
               {
                   title: 'Inbox',

@@ -8,6 +8,7 @@ export type DashboardStats = {
     publishedSafaris: number;
     pendingBookings: number;
     totalBookings: number;
+    contactMessages: number;
     pricingTiers: number;
     galleryItems: number;
     testimonials: number;

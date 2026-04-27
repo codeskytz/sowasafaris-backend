@@ -6,6 +6,7 @@ use App\Models\GalleryItem;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\Rules\Unique;
 
 class StoreGalleryItemRequest extends FormRequest
@@ -24,7 +25,8 @@ class StoreGalleryItemRequest extends FormRequest
             'title' => ['required', 'string', 'max:160'],
             'slug' => ['required', 'string', 'max:180', $this->uniqueSlugRule()],
             'category' => ['required', 'string', Rule::in(GalleryItem::categories())],
-            'image_url' => ['required', 'url', 'max:2048'],
+            'image_url' => ['nullable', 'url', 'max:2048', Rule::requiredIf(! $this->hasFile('image_file'))],
+            'image_file' => ['nullable', File::image()->max(6 * 1024), Rule::requiredIf(! $this->filled('image_url'))],
             'image_alt' => ['required', 'string', 'max:255'],
             'layout_size' => ['required', 'string', Rule::in(GalleryItem::layoutSizes())],
             'is_published' => ['required', 'boolean'],

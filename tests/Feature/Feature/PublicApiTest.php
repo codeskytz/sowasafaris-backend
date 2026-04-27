@@ -4,6 +4,7 @@ namespace Tests\Feature\Feature;
 
 use App\Mail\BookingRequestReceived;
 use App\Models\Booking;
+use App\Models\ContactMessage;
 use App\Models\PricingTier;
 use App\Models\Safari;
 use Database\Seeders\SowaSafariMockDataSeeder;
@@ -106,6 +107,27 @@ class PublicApiTest extends TestCase
             ->assertJsonCount(6, 'galleryItems')
             ->assertJsonCount(3, 'testimonials')
             ->assertJsonPath('departureMonths.0.value', '2026-06')
+            ->assertJsonPath('contactContent.email', 'support@sowasafaris.com')
             ->assertJsonPath('footerContent.brand', 'SowaSafaris');
+    }
+
+    public function test_contact_messages_can_be_submitted_publicly(): void
+    {
+        $this->postJson(route('api.contact-messages.store'), [
+            'name' => 'Nia Traveler',
+            'email' => 'nia@example.com',
+            'phone' => '+255 712 000 000',
+            'subject' => 'Private family safari',
+            'message' => 'We would like help planning a private family safari for August.',
+        ])
+            ->assertCreated()
+            ->assertJsonPath('data.name', 'Nia Traveler')
+            ->assertJsonPath('data.status', 'new');
+
+        $message = ContactMessage::query()->firstOrFail();
+
+        $this->assertSame('Nia Traveler', $message->name);
+        $this->assertSame('Private family safari', $message->subject);
+        $this->assertSame('new', $message->status);
     }
 }

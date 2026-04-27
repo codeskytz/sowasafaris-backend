@@ -14,10 +14,17 @@ use Illuminate\Database\Eloquent\Model;
 class SiteSetting extends Model
 {
     public const HERO_CONTENT = 'hero_content';
+
     public const NAVIGATION_LINKS = 'navigation_links';
+
     public const TRUST_INDICATORS = 'trust_indicators';
+
     public const DEPARTURE_MONTHS = 'departure_months';
+
+    public const CONTACT_CONTENT = 'contact_content';
+
     public const FOOTER_LINKS = 'footer_links';
+
     public const FOOTER_CONTENT = 'footer_content';
 
     /** @use HasFactory<SiteSettingFactory> */
@@ -33,6 +40,7 @@ class SiteSetting extends Model
             static::NAVIGATION_LINKS => static::getValue(static::NAVIGATION_LINKS, []),
             static::TRUST_INDICATORS => static::getValue(static::TRUST_INDICATORS, []),
             static::DEPARTURE_MONTHS => static::getValue(static::DEPARTURE_MONTHS, []),
+            static::CONTACT_CONTENT => static::getValue(static::CONTACT_CONTENT, static::defaultContactContent()),
             static::FOOTER_LINKS => static::getValue(static::FOOTER_LINKS, []),
             static::FOOTER_CONTENT => static::getValue(static::FOOTER_CONTENT, static::defaultFooterContent()),
         ];
@@ -61,6 +69,7 @@ class SiteSetting extends Model
             static::NAVIGATION_LINKS,
             static::TRUST_INDICATORS,
             static::DEPARTURE_MONTHS,
+            static::CONTACT_CONTENT,
             static::FOOTER_LINKS,
             static::FOOTER_CONTENT,
         ] as $key) {
@@ -112,6 +121,23 @@ class SiteSetting extends Model
         return [
             'brand' => 'SowaSafaris',
             'copyright_text' => '',
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private static function defaultContactContent(): array
+    {
+        return [
+            'headline' => 'Talk to Sowa Safaris',
+            'description' => 'Ask about routes, availability, group trips, or custom safari planning. Our team will help you choose the right journey.',
+            'email' => 'support@sowasafaris.com',
+            'phone' => '+255 700 000 000',
+            'whatsapp' => '+255 700 000 000',
+            'address' => 'Moshi, Kilimanjaro, Tanzania',
+            'office_hours' => 'Monday to Saturday, 8:00 AM - 6:00 PM',
+            'response_time' => 'We usually reply within one business day.',
         ];
     }
 }

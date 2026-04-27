@@ -30,6 +30,41 @@ type SiteContentPageProps = {
 const textAreaClasses =
     'border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 flex min-h-28 w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50';
 
+const materialIconOptions = [
+    { value: 'military_tech', label: 'Summit success' },
+    { value: 'explore', label: 'Compass' },
+    { value: 'health_and_safety', label: 'Safety shield' },
+    { value: 'landscape', label: 'Mountain' },
+    { value: 'hiking', label: 'Hiking' },
+    { value: 'map', label: 'Map' },
+    { value: 'route', label: 'Route' },
+    { value: 'flag', label: 'Flag' },
+    { value: 'star', label: 'Star' },
+    { value: 'verified', label: 'Verified' },
+    { value: 'workspace_premium', label: 'Premium badge' },
+    { value: 'groups', label: 'Groups' },
+    { value: 'support_agent', label: 'Support' },
+    { value: 'call', label: 'Phone' },
+    { value: 'mail', label: 'Email' },
+    { value: 'chat', label: 'Chat' },
+    { value: 'public', label: 'World' },
+    { value: 'travel_explore', label: 'Travel explore' },
+    { value: 'flight_takeoff', label: 'Departure' },
+    { value: 'hotel', label: 'Lodging' },
+    { value: 'restaurant', label: 'Meals' },
+    { value: 'local_fire_department', label: 'Campfire' },
+    { value: 'wb_sunny', label: 'Sun' },
+    { value: 'nightlight', label: 'Night' },
+    { value: 'thermostat', label: 'Weather' },
+    { value: 'medical_services', label: 'Medical' },
+    { value: 'security', label: 'Security' },
+    { value: 'shield', label: 'Shield' },
+    { value: 'emoji_events', label: 'Trophy' },
+    { value: 'favorite', label: 'Favorite' },
+    { value: 'photo_camera', label: 'Camera' },
+    { value: 'payments', label: 'Payments' },
+] as const;
+
 export default function SiteContentPage({ content }: SiteContentPageProps) {
     const { data, setData, put, processing, errors } =
         useForm<AdminSiteContent>(content);
@@ -377,17 +412,51 @@ export default function SiteContentPage({ content }: SiteContentPageProps) {
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label>Material icon name</Label>
-                                    <Input
-                                        value={indicator.icon}
-                                        onChange={(event) =>
-                                            updateTrustIndicator(
-                                                index,
-                                                'icon',
-                                                event.target.value,
-                                            )
-                                        }
-                                    />
+                                    <Label>Icon</Label>
+                                    <div className="grid gap-3 rounded-xl border bg-muted/30 p-3 sm:grid-cols-[88px_1fr]">
+                                        <div className="flex min-h-20 flex-col items-center justify-center rounded-lg bg-[#0f3d31] text-[#fff7df]">
+                                            <span className="material-symbols-outlined text-4xl">
+                                                {indicator.icon || 'star'}
+                                            </span>
+                                            <span className="mt-1 text-[0.65rem] font-bold tracking-[0.16em] text-[#ffba20] uppercase">
+                                                Preview
+                                            </span>
+                                        </div>
+
+                                        <select
+                                            value={indicator.icon}
+                                            onChange={(event) =>
+                                                updateTrustIndicator(
+                                                    index,
+                                                    'icon',
+                                                    event.target.value,
+                                                )
+                                            }
+                                            className="border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 rounded-md border px-3 py-2 text-sm shadow-xs outline-none focus-visible:ring-[3px]"
+                                        >
+                                            {indicator.icon &&
+                                            !materialIconOptions.some(
+                                                (option) =>
+                                                    option.value ===
+                                                    indicator.icon,
+                                            ) ? (
+                                                <option value={indicator.icon}>
+                                                    Current: {indicator.icon}
+                                                </option>
+                                            ) : null}
+                                            <option value="">
+                                                Choose an icon
+                                            </option>
+                                            {materialIconOptions.map((option) => (
+                                                <option
+                                                    key={option.value}
+                                                    value={option.value}
+                                                >
+                                                    {option.label} ({option.value})
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
                                     <InputError
                                         message={errorFor(
                                             `trust_indicators.${index}.icon`,
@@ -447,7 +516,7 @@ export default function SiteContentPage({ content }: SiteContentPageProps) {
                                     {
                                         title: '',
                                         description: '',
-                                        icon: '',
+                                        icon: 'star',
                                     },
                                 ])
                             }
@@ -544,6 +613,167 @@ export default function SiteContentPage({ content }: SiteContentPageProps) {
                         >
                             Add departure month
                         </Button>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Contact page</CardTitle>
+                        <CardDescription>
+                            Update the contact details and introduction shown on
+                            the public contact page.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="grid gap-4 md:grid-cols-2">
+                        <div className="grid gap-2 md:col-span-2">
+                            <Label htmlFor="contact-headline">Headline</Label>
+                            <Input
+                                id="contact-headline"
+                                value={data.contact_content.headline}
+                                onChange={(event) =>
+                                    setData('contact_content', {
+                                        ...data.contact_content,
+                                        headline: event.target.value,
+                                    })
+                                }
+                            />
+                            <InputError
+                                message={errorFor('contact_content.headline')}
+                            />
+                        </div>
+
+                        <div className="grid gap-2 md:col-span-2">
+                            <Label htmlFor="contact-description">
+                                Description
+                            </Label>
+                            <textarea
+                                id="contact-description"
+                                value={data.contact_content.description}
+                                onChange={(event) =>
+                                    setData('contact_content', {
+                                        ...data.contact_content,
+                                        description: event.target.value,
+                                    })
+                                }
+                                className={textAreaClasses}
+                            />
+                            <InputError
+                                message={errorFor(
+                                    'contact_content.description',
+                                )}
+                            />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="contact-email">Email</Label>
+                            <Input
+                                id="contact-email"
+                                type="email"
+                                value={data.contact_content.email}
+                                onChange={(event) =>
+                                    setData('contact_content', {
+                                        ...data.contact_content,
+                                        email: event.target.value,
+                                    })
+                                }
+                            />
+                            <InputError
+                                message={errorFor('contact_content.email')}
+                            />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="contact-phone">Phone</Label>
+                            <Input
+                                id="contact-phone"
+                                value={data.contact_content.phone}
+                                onChange={(event) =>
+                                    setData('contact_content', {
+                                        ...data.contact_content,
+                                        phone: event.target.value,
+                                    })
+                                }
+                            />
+                            <InputError
+                                message={errorFor('contact_content.phone')}
+                            />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="contact-whatsapp">WhatsApp</Label>
+                            <Input
+                                id="contact-whatsapp"
+                                value={data.contact_content.whatsapp}
+                                onChange={(event) =>
+                                    setData('contact_content', {
+                                        ...data.contact_content,
+                                        whatsapp: event.target.value,
+                                    })
+                                }
+                            />
+                            <InputError
+                                message={errorFor('contact_content.whatsapp')}
+                            />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="contact-office-hours">
+                                Office hours
+                            </Label>
+                            <Input
+                                id="contact-office-hours"
+                                value={data.contact_content.office_hours}
+                                onChange={(event) =>
+                                    setData('contact_content', {
+                                        ...data.contact_content,
+                                        office_hours: event.target.value,
+                                    })
+                                }
+                            />
+                            <InputError
+                                message={errorFor(
+                                    'contact_content.office_hours',
+                                )}
+                            />
+                        </div>
+
+                        <div className="grid gap-2 md:col-span-2">
+                            <Label htmlFor="contact-address">Address</Label>
+                            <Input
+                                id="contact-address"
+                                value={data.contact_content.address}
+                                onChange={(event) =>
+                                    setData('contact_content', {
+                                        ...data.contact_content,
+                                        address: event.target.value,
+                                    })
+                                }
+                            />
+                            <InputError
+                                message={errorFor('contact_content.address')}
+                            />
+                        </div>
+
+                        <div className="grid gap-2 md:col-span-2">
+                            <Label htmlFor="contact-response-time">
+                                Response time
+                            </Label>
+                            <Input
+                                id="contact-response-time"
+                                value={data.contact_content.response_time}
+                                onChange={(event) =>
+                                    setData('contact_content', {
+                                        ...data.contact_content,
+                                        response_time: event.target.value,
+                                    })
+                                }
+                            />
+                            <InputError
+                                message={errorFor(
+                                    'contact_content.response_time',
+                                )}
+                            />
+                        </div>
                     </CardContent>
                 </Card>
 
